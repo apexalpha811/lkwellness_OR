@@ -364,6 +364,18 @@ footer{
 }
 .disclaimer{max-width:var(--maxw);margin:0 auto;padding:0 24px 40px;color:var(--bone-faint);font-size:.72rem;line-height:1.65}
 
+/* The methodology link has to out-read the footer's legal chrome or nobody
+   registers it as clickable. Larger, sentence case, rose, underlined. */
+.methodlink{
+  font-family:var(--display);font-size:1rem;font-weight:500;
+  letter-spacing:.3px;text-transform:none;white-space:nowrap;
+  color:var(--rose);border-bottom:1px solid rgba(192,141,124,.55);
+  padding-bottom:3px;transition:color .2s ease,border-color .2s ease;
+}
+.methodlink:hover{color:var(--bone);border-bottom-color:var(--bone)}
+.methodlink .arw{display:inline-block;margin-left:6px;transition:transform .2s ease}
+.methodlink:hover .arw{transform:translateX(3px)}
+
 a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:4px}
 
 /* ---------------- RESPONSIVE ---------------- */
@@ -807,7 +819,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 
 <footer>
   <span>L&amp;K Wellness &middot; Playa Vista, CA &middot; Est. 2026</span>
-  <span><a href="methodology.html" class="srclink">How these numbers were built</a> &middot; Confidential &middot; For qualified investors and lenders</span>
+  <a href="methodology.html" class="methodlink">How these numbers were built<span class="arw">&rarr;</span></a>
+  <span>Confidential &middot; For qualified investors and lenders</span>
 </footer>
 <div class="disclaimer">
   Forward-looking figures in this document are projections based on the stated assumptions and are not guarantees of future performance. Actual results will differ. This document is not an offer to sell or a solicitation of an offer to buy any security. Final capital structure is subject to lender credit approval and counsel. Market and demographic figures carry their sources inline; figures we could not source were excluded rather than estimated.
