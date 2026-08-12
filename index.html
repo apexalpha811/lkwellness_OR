@@ -94,6 +94,18 @@ nav.secnav a.on{color:var(--ground);background:var(--rose)}
 .scenbadge .dot{width:6px;height:6px;border-radius:50%;background:var(--rose);flex-shrink:0}
 .scenbadge .t{font-family:var(--display);font-size:.72rem;font-weight:500;letter-spacing:.8px;color:var(--rose);white-space:nowrap}
 
+/* Toggle, shown instead of the badge when a build offers more than one
+   capital structure for the same business. */
+.scenswitch{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.scenswitch .lbl{font-family:var(--display);font-size:.56rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--bone-faint);white-space:nowrap}
+.switch{display:flex;border:1px solid var(--eucalyptus);border-radius:999px;overflow:hidden;background:var(--forest)}
+.switch button{
+  font-family:var(--display);font-size:.72rem;font-weight:500;letter-spacing:.6px;
+  background:none;border:none;color:var(--bone-dim);cursor:pointer;
+  padding:7px 14px;transition:.2s;white-space:nowrap;
+}
+.switch button[aria-pressed="true"]{background:var(--rose);color:var(--ground)}
+
 /* ---------------- LAYOUT ---------------- */
 main{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 section{padding:var(--pad-sec) 0;scroll-margin-top:120px;border-top:1px solid var(--line)}
@@ -369,13 +381,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   .layer-club{width:100%}
   .scenbadge{padding:5px 10px}
   .scenbadge .t{font-size:.64rem}
+  /* Logo plus a two-button toggle does not fit a phone header on one line.
+     Drop the "Private raise" caption and let the row wrap rather than
+     pushing the page into horizontal scroll. */
+  .nav-inner{flex-wrap:wrap;row-gap:8px}
+  .scenswitch .lbl{display:none}
+  .switch button{padding:6px 10px;font-size:.64rem}
   footer{padding:32px 18px 48px;flex-direction:column;gap:10px}
   .disclaimer{padding:0 18px 32px}
 }
 @media(max-width:480px){
   .g4,.tiergrid,.ask-grid,.hero-metrics,.timeline{grid-template-columns:1fr}
   .card{padding:20px}
-  .switch button{padding:6px 10px;font-size:.66rem}
+  .switch button{padding:5px 9px;font-size:.6rem;letter-spacing:0}
   .logo{font-size:.84rem;letter-spacing:1px}
   .btn{width:100%;justify-content:center}
 }
@@ -421,7 +439,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       <a href="#sba">SBA</a>
       <a href="#team">Team</a>
     </nav>
-    <div class="scenbadge"><span class="dot"></span><span class="t" id="scenBadge"></span></div>
+    <div id="scenControl"></div>
   </div>
 </header>
 
@@ -529,6 +547,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   <div class="eyebrow">The surgery suite</div>
   <h2>One accredited operating room, inside the clinic.</h2>
   <p class="lead mt">A 900 square foot office-based surgery suite planned to the published iOR Partners specification: operating room, pre-op and PACU, sterile processing, sterile supply and soiled utility. Accredited by Quad A. It sits in the clinic layer, which means anyone can book it. Surgery is never a membership benefit.</p>
+
+  <div class="card accent mt2">
+    <div class="eyebrow">What this suite collects</div>
+    <h3>Facility fee only. The surgeon bills their own professional fee.</h3>
+    <p class="muted mt">Every surgical figure in this brief is the <b class="rose">facility fee</b> &mdash; what L&amp;K collects for the room, clinical staff, supplies, sedation monitoring and recovery. The operating surgeon is a principal who bills the patient directly for their professional work, and that fee never appears on these books. The all-in price a patient pays is materially higher than the numbers shown here.</p>
+    <p class="muted mt">This is why the operating-room margins run higher than the treatment-room lines: with no surgeon's share to pay, facility cost of goods is disposables, implants, drugs and linens only. Clinical staff already sits in fixed overhead. Across <b data-lk="capacity.operatingRoom.demand|text"></b> operating-room hours a month, the schedule works out to roughly <b class="rose" id="orHourRate"></b> per operating-room hour.</p>
+  </div>
 
   <div class="card accent mt2">
     <div class="eyebrow">The ceiling, stated up front</div>
@@ -695,12 +720,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     <div class="eyebrow">Total project cost &middot; <span data-lk="label|text"></span></div>
     <div class="ask-amt" data-lk="projectCost|moneyM"></div>
     <p class="muted mt" data-lk="tagline|text"></p>
-    <div class="ask-grid">
-      <div><div class="k">SBA 7(a) loan</div><div class="v" data-lk="loanFloor|money"></div></div>
-      <div><div class="k">Equity injection &middot; 10% floor</div><div class="v" data-lk="injectionFloor|money"></div></div>
-      <div><div class="k">Equity at 20% planning</div><div class="v" data-lk="injectionPlanning|money"></div></div>
-      <div><div class="k">Footprint</div><div class="v" data-lk="sqft|sqft"></div></div>
-    </div>
+    <div class="ask-grid" id="askGrid"></div>
   </div>
 
   <h3 class="mt3">Use of funds</h3>
@@ -787,7 +807,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 
 <footer>
   <span>L&amp;K Wellness &middot; Playa Vista, CA &middot; Est. 2026</span>
-  <span>Confidential &middot; For qualified investors and lenders</span>
+  <span><a href="methodology.html" class="srclink">How these numbers were built</a> &middot; Confidential &middot; For qualified investors and lenders</span>
 </footer>
 <div class="disclaimer">
   Forward-looking figures in this document are projections based on the stated assumptions and are not guarantees of future performance. Actual results will differ. This document is not an offer to sell or a solicitation of an offer to buy any security. Final capital structure is subject to lender credit approval and counsel. Market and demographic figures carry their sources inline; figures we could not source were excluded rather than estimated.
@@ -798,7 +818,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 (function(){
   'use strict';
   var D = window.LK;
-  // Each build pins one scenario. The other case is a separate site and deck.
+  // A build either pins one scenario or offers a short list to toggle between.
+  // The toggle is only ever used for alternative capital structures on the
+  // SAME business — never to switch between different businesses.
+  var SELECTABLE = (D.selectable && D.selectable.length) ? D.selectable : [D.scenario];
   var scen = D.scenario;
 
   // ---- formatters ----
@@ -913,6 +936,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     clear(or); clear(tr);
     menu.or.forEach(function(t){ or.appendChild(el('li', null, t)); });
     menu.treatment.forEach(function(t){ tr.appendChild(el('li', null, t)); });
+
+    // Derived, not typed: the per-OR-hour rate is the sanity check a reviewer
+    // runs against a posted facility fee schedule.
+    var feeGross = s.lines.filter(function(l){ return l.facilityFee; })
+                          .reduce(function(a, l){ return a + l.gross; }, 0);
+    var hours = s.capacity.operatingRoom ? s.capacity.operatingRoom.demand : 0;
+    document.getElementById('orHourRate').textContent =
+      hours ? money(Math.round(feeGross / hours)) : '—';
   }
 
   function renderTiers(s){
@@ -1129,6 +1160,29 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     });
   }
 
+  function renderAskGrid(s){
+    var g = document.getElementById('askGrid');
+    clear(g);
+    // On a private raise the injection is a committed number, so the 10%/20%
+    // framing is meaningless — show the raise and what share of the project
+    // it covers instead.
+    var cells = s.isPrivate
+      ? [['Private investment', money(s.injectionFloor)],
+         ['Share of project', pct0(s.injectionPct)],
+         ['SBA 7(a) loan', money(s.loanFloor)],
+         ['Footprint', sqftfmt(s.sqft)]]
+      : [['SBA 7(a) loan', money(s.loanFloor)],
+         ['Equity injection · 10% floor', money(s.injectionFloor)],
+         ['Equity at 20% planning', money(s.injectionPlanning)],
+         ['Footprint', sqftfmt(s.sqft)]];
+    cells.forEach(function(c){
+      var d = el('div');
+      d.appendChild(el('div','k', c[0]));
+      d.appendChild(el('div','v', c[1]));
+      g.appendChild(d);
+    });
+  }
+
   function renderUOF(s){
     var tb = document.getElementById('uofBody');
     clear(tb);
@@ -1149,17 +1203,22 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   function renderSBA(s){
     var box = document.getElementById('sbaStruct');
     clear(box);
-    [['Total project cost', money(s.projectCost)],
-     ['SBA 7(a) loan', money(s.loanFloor)],
-     ['Equity injection (10% floor)', money(s.injectionFloor)],
-     ['Equity injection (20% planning)', money(s.injectionPlanning)],
+    (s.isPrivate
+      ? [['Total project cost', money(s.projectCost)],
+         ['Private investment', money(s.injectionFloor) + '  (' + pct0(s.injectionPct) + ')'],
+         ['SBA 7(a) loan', money(s.loanFloor)]]
+      : [['Total project cost', money(s.projectCost)],
+         ['SBA 7(a) loan', money(s.loanFloor)],
+         ['Equity injection (10% floor)', money(s.injectionFloor)],
+         ['Equity injection (20% planning)', money(s.injectionPlanning)]]
+    ).concat([
      ['Assumed rate', pct1(D.assumptions.sbaRate) + ' (Prime + 2.75%)'],
      ['Term', (D.assumptions.loanTermMonths / 12) + ' years'],
      ['Interest-only period', D.assumptions.interestOnlyMonths + ' months'],
      ['Payment during interest-only', money(s.interestOnlyPayment) + ' / mo'],
      ['Payment once amortizing', money(s.monthlyDebt) + ' / mo'],
      ['Working capital and reserve', money(s.reserve)]
-    ].forEach(function(r){ box.appendChild(kv(r[0], r[1])); });
+    ]).forEach(function(r){ box.appendChild(kv(r[0], r[1])); });
 
     var tb = document.getElementById('dscrBody');
     clear(tb);
@@ -1220,8 +1279,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     ];
     if (s.stations && s.stations.or) {
       seats.splice(2, 0,
-        ['Surgeon (plastic or facial plastic, board certified)', 'Operative cases, patient selection, surgical QA'],
-        ['Surgical Technologist and Circulator', 'OR setup, sterile field, instrument processing']);
+        ['Surgeon (plastic or facial plastic, board certified) · Principal',
+         'Operative cases, patient selection, surgical QA. Bills professional fees directly; compensation sits below the operating line as an owner distribution, not facility payroll.'],
+        ['Surgical Technologist, Circulator and Monitoring RN',
+         'OR setup, sterile field, sedation monitoring, PACU recovery, instrument processing']);
     }
     seats.forEach(function(r){
       var tr = el('tr');
@@ -1255,8 +1316,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       rows.splice(3, 0,
         ['An adverse surgical event, or a lapse in accreditation.',
          'The moderate-sedation ceiling and the two-hour recovery cap are the primary controls: they exclude every general-anesthesia procedure and the acuity that comes with them. Published patient-selection criteria, a written transfer agreement with a nearby acute-care facility, and a standing QA and performance-improvement program under the accrediting body sit behind that.'],
-        ['The surgeon leaves and operative volume stops.',
-         'Surgical revenue is roughly a third of the total; the wellness club and clinic carry fixed overhead independently. Coverage stays above the 1.25x convention on the wellness business alone, so a vacant OR delays growth rather than threatening debt service.']);
+        ['Operating room utilization comes in below plan.',
+         'The facility bills a fee for the room, not for a particular surgeon, so the suite is not one person’s key-person exposure — additional credentialed principals can be added without changing the model. Surgical facility fees are roughly a tenth of total revenue and the OR runs at 61% of practical capacity, so the wellness club and clinic carry fixed overhead independently and coverage holds above the 1.25x convention on that business alone.']);
     }
     g.appendChild(el('div','rh','Risk'));
     g.appendChild(el('div','rh','Mitigation'));
@@ -1281,10 +1342,50 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 
   var WORDS = { 17: 'Seventeen', 24: 'Twenty-four' };
 
+  // Badge when there is one scenario, toggle when there are several.
+  function renderScenControl(){
+    var host = document.getElementById('scenControl');
+    if (host.dataset.built === '1') { syncSwitch(); return; }
+    clear(host);
+    if (SELECTABLE.length < 2) {
+      host.className = 'scenbadge';
+      host.appendChild(el('span','dot'));
+      host.appendChild(el('span','t'));
+      host.firstChild.nextSibling.id = 'scenBadge';
+    } else {
+      host.className = 'scenswitch';
+      host.appendChild(el('span','lbl','Private raise'));
+      var sw = el('div','switch');
+      sw.setAttribute('role','group');
+      sw.setAttribute('aria-label','Private investment amount');
+      SELECTABLE.forEach(function(k){
+        var t = D.scenarios[k];
+        var b = el('button', null, t.shortLabel || t.label);
+        b.type = 'button';
+        b.setAttribute('data-scen', k);
+        b.addEventListener('click', function(){ scen = k; render(); });
+        sw.appendChild(b);
+      });
+      host.appendChild(sw);
+    }
+    host.dataset.built = '1';
+    syncSwitch();
+  }
+
+  function syncSwitch(){
+    Array.prototype.forEach.call(document.querySelectorAll('#scenControl .switch button'), function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-scen') === scen));
+    });
+  }
+
   function renderScenarioChrome(s){
-    var badge = s.label + ' case  ·  ' + moneyM(s.projectCost);
-    document.getElementById('scenBadge').textContent = badge;
-    document.title = 'L&K Wellness · ' + s.label + ' Case · Playa Vista · Investor & SBA Brief';
+    renderScenControl();
+    var badgeEl = document.getElementById('scenBadge');
+    if (badgeEl) badgeEl.textContent = s.label + ' case  ·  ' + moneyM(s.projectCost);
+    // The private labels already end in "private", so appending "Case" there
+    // would read "$2.0M private Case".
+    document.title = 'L&K Wellness · ' + s.label + (s.isPrivate ? '' : ' Case') +
+      ' · Playa Vista · Investor & SBA Brief';
 
     // Line count moves with the scenario, so the headings cannot be hardcoded.
     var live = D.services.filter(function(v){ return v.sessions[s.key] > 0; }).length;
@@ -1293,13 +1394,31 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       'Five verbs, ' + word.toLowerCase() + ' revenue lines.';
     document.getElementById('econTitle').textContent =
       word + ' lines, every one cash-pay.';
-    document.getElementById('askTitle').textContent =
-      moneyM(s.projectCost) + ' to build the ' + s.label.toLowerCase() + ' case.';
-    document.getElementById('askIntro').textContent =
-      s.tagline + ' The loan sits inside the SBA 7(a) $5,000,000 ceiling. ' +
-      'A ' + (scen === 'lean' ? 'larger, ' + moneyM(D.scenarios.ample.projectCost) + ' "ample"'
-                              : 'tighter, ' + moneyM(D.scenarios.lean.projectCost) + ' "lean"') +
-      ' case is presented as a separate brief with its own deck.';
+    if (s.isPrivate) {
+      document.getElementById('askTitle').textContent =
+        moneyM(s.injectionFloor) + ' private against a ' + moneyM(s.loanFloor) + ' SBA loan.';
+      var other = SELECTABLE.filter(function(k){ return k !== scen; })[0];
+      var compare = '';
+      if (other && D.scenarios[other]) {
+        var o = D.scenarios[other];
+        compare = ' At ' + moneyM(o.injectionFloor) + ' the loan is ' + moneyM(o.loanFloor) +
+                  ' and coverage is ' + xfmt(o.dscr) + '.';
+      }
+      document.getElementById('askIntro').textContent =
+        'Project cost is unchanged at ' + moneyM(s.projectCost) + '. The private raise replaces the ' +
+        'minimum equity injection, so the SBA 7(a) loan shrinks to fill the rest — ' +
+        pct0(s.injectionPct) + ' of the project funded by the raise. Less debt against the same ' +
+        'operating income lifts stabilized coverage to ' + xfmt(s.dscr) + '.' + compare;
+    } else {
+      document.getElementById('askTitle').textContent =
+        moneyM(s.projectCost) + ' to build the ' + s.label.toLowerCase() + ' case.';
+      var alt = scen === 'lean' ? D.scenarios.ample : D.scenarios.lean;
+      document.getElementById('askIntro').textContent =
+        s.tagline + ' The loan sits inside the SBA 7(a) $5,000,000 ceiling.' +
+        (alt ? ' A ' + (scen === 'lean' ? 'larger, ' + moneyM(alt.projectCost) + ' "ample"'
+                                        : 'tighter, ' + moneyM(alt.projectCost) + ' "lean"') +
+               ' case is presented as a separate brief with its own deck.' : '');
+    }
   }
 
   function render(){
@@ -1309,7 +1428,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     renderClinicChips(s); renderSurgery(s);
     renderTiers(s); renderSpace(s); renderCapacity(s); renderServices(s);
     renderWaterfall(s); renderRamp(s); renderPL(s); renderBand(s);
-    renderUOF(s); renderSBA(s); renderTeam(s); renderRisks(s);
+    renderAskGrid(s); renderUOF(s); renderSBA(s); renderTeam(s); renderRisks(s);
+    syncSwitch();
   }
 
   // Scroll spy for the section nav.
