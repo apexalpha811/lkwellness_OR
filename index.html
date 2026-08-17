@@ -214,7 +214,10 @@ p+p{margin-top:14px}
 .chip.r{border-color:rgba(192,141,124,0.55);color:var(--rose)}
 
 /* ---------------- TIERS ---------------- */
-.tiergrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+/* Column count follows the number of tiers actually on offer, ample dropped to
+   three when the Day Pass was withdrawn. Set via a custom property, not an
+   inline style, so the mobile breakpoints below can still override it. */
+.tiergrid{display:grid;grid-template-columns:repeat(var(--tier-cols,4),1fr);gap:16px;margin-top:30px}
 .tier{
   background:var(--forest);border:1px solid var(--eucalyptus);border-radius:var(--radius);
   padding:22px;display:flex;flex-direction:column;
@@ -422,7 +425,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   .card,.tier,.mkt,.bandcard,.askblock,.cta,.tablewrap,.rampwrap{background:#fff;border-color:#bbb}
   section{page-break-inside:avoid;border-top:1px solid #ccc}
   nav.secnav{display:none}
-  /* Keep the scenario badge in print — a printed brief must say which case
+  /* Keep the scenario badge in print, a printed brief must say which case
      it is on every copy. */
   .scenbadge{border-color:#999}
   .scenbadge .t{color:#111}
@@ -444,7 +447,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       <a href="#surgery" hidden>Surgery</a>
       <a href="#membership">Membership</a>
       <a href="#space">Space</a>
-      <a href="#market">Market</a>
+      <a href="#market">Category</a><a href="#catchment">Market</a>
       <a href="#economics">Economics</a>
       <a href="#ramp">Ramp</a>
       <a href="#ask">Ask</a>
@@ -487,7 +490,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   <p class="lead mt">A patient optimizing their health today visits a medspa for injectables, a recovery studio for cold plunge, a longevity clinic for labs, and a concierge doctor for hormones. Four intakes, four records, four bills, four waiting rooms. Not one of them is somewhere you would choose to spend a Saturday morning.</p>
   <div class="grid g3 mt2">
     <div class="card statcard"><div class="n">4+</div><div class="l">Separate providers a patient coordinates for care that belongs in one building.</div></div>
-    <div class="card statcard"><div class="n">0</div><div class="l">Facilities on the Westside combining licensed medical care with a genuine social club.</div></div>
+    <div class="card statcard"><div class="n" id="scopeN"></div><div class="l" id="scopeL"></div></div>
     <div class="card statcard"><div class="n">10,488</div><div class="l">US medical spas as of 2023, up from 8,899 the year before. The category is commoditizing on treatment alone.</div></div>
   </div>
 </section>
@@ -495,23 +498,23 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <!-- 3 · THE INSIGHT -->
 <section id="insight">
   <div class="eyebrow">The insight</div>
-  <h2>Two proven models. Neither one is complete.</h2>
+  <h2>Others proved the format. Only a licensed facility can deliver it.</h2>
   <div class="grid g2 mt2">
     <div class="card">
       <div class="pill">Remedy Place</div>
-      <h3 class="mt">Open booking works.</h3>
-      <p class="muted mt">They built the social wellness club and proved you do not have to gate the door to build a brand. Anyone can book a remedy; members get credits, member pricing, and guest passes. What they do not have is a real ladder of affiliation.</p>
+      <h3 class="mt">Where a non-medical operator stops.</h3>
+      <p class="muted mt">They proved the social wellness format works commercially, and they built it well. What they cannot do is medicine. No physician on site means no PRP, no IV therapy, no neuromodulators, no filler, no laser. Those are not features they chose to skip. They sit on the other side of a licensing and supervision threshold.</p>
     </div>
     <div class="card">
       <div class="pill">Soho House</div>
-      <h3 class="mt">The ladder works.</h3>
-      <p class="muted mt">Their transferable asset is not exclusivity, it is the tiering. Soho Friends is a published annual tier that buys discounts and event invitations but no club access. What they do not have is medicine.</p>
+      <h3 class="mt">Where the ladder was proven.</h3>
+      <p class="muted mt">Their transferable asset is not exclusivity, it is the tiering. Soho Friends is a published annual tier that buys discounts and event invitations but no club access. What they do not have is medicine either.</p>
     </div>
   </div>
   <div class="card accent mt2">
-    <div class="eyebrow">The gap</div>
-    <h3>Nobody has put a licensed medical clinic inside a social club and left the medicine open to everyone.</h3>
-    <p class="muted mt">Gating clinical care behind a membership is bad business and a bad look. Gating the room where people actually want to spend time is precisely what a club is. L&amp;K separates the two, and that separation is the entire model.</p>
+    <div class="eyebrow">The difference</div>
+    <h3>L&amp;K is not a practice built around a doctor. It is the facility a doctor needs.</h3>
+    <p class="muted mt">The rooms, the diagnostics, the infusion suite, the operating suite, the staff and the accreditation, already standing. Physicians practice here. Investors own the building they practice in, which is why the surgical lines bill a facility fee while the surgeon bills their own patients directly. That is the leg up: not a head start on a format anyone can copy, but an asset a competitor has to become in order to compete.</p>
   </div>
 </section>
 
@@ -519,13 +522,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <section id="model">
   <div class="eyebrow">The model</div>
   <h2>One building. Two layers. Different doors.</h2>
-  <p class="lead mt">The clinic underneath is a licensed, cash-pay medical practice open to any member of the public at rack rate. The club on top is a capped, members-only social layer. Day passes let anyone taste the club without joining, and membership never becomes a condition of receiving care.</p>
+  <p class="lead mt">The clinic underneath is a licensed, cash-pay medical practice open to any member of the public at list price. The club on top is a capped, members-only social layer. <span class="dp">Day passes let anyone taste the club without joining, and membership</span><span class="ndp">Membership</span> never becomes a condition of receiving care.</p>
 
   <div class="layers">
     <div class="layer layer-club">
       <div class="tag">Members only &middot; capped</div>
       <h3>The Club</h3>
-      <div class="who muted">Residents and Longevity members. Day pass holders by the visit.</div>
+      <div class="who muted">Residents and Longevity members.<span class="dp"> Day pass holders by the visit.</span></div>
       <div class="chips">
         <span class="chip r">Contrast suite</span>
         <span class="chip r">Sauna &amp; cold plunge ritual</span>
@@ -540,7 +543,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     <div class="layer layer-clinic">
       <div class="tag">Open to everyone &middot; no membership required</div>
       <h3>The Clinic</h3>
-      <div class="who muted">Anyone. Book online, pay rack rate, walk out.</div>
+      <div class="who muted">Anyone. Book online, pay list price, walk out.</div>
       <div class="chips" id="clinicChips"></div>
     </div>
   </div>
@@ -592,7 +595,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <section id="membership">
   <div class="eyebrow">Membership architecture</div>
   <h2>A ladder, not a gate.</h2>
-  <p class="lead mt">Four tiers, each a genuine step up rather than a repackaging of the last. The cheap annual tier is the funnel; the capped monthly tiers are the business. Mechanics follow the proven playbook: a three-month minimum then month-to-month, credits that roll over while active and expire on cancellation, freezes on seven days' notice, tier changes after the initial commitment.</p>
+  <p class="lead mt"><span id="tierCount">Four tiers</span>, each a genuine step up rather than a repackaging of the last. The cheap annual tier is the funnel; the capped monthly tiers are the business. Mechanics follow the proven playbook: a three-month minimum then month-to-month, credits that roll over while active and expire on cancellation, freezes on seven days' notice, tier changes after the initial commitment.</p>
   <div class="tiergrid" id="tierGrid"></div>
 
   <div class="card accent mt2">
@@ -608,10 +611,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   <h2>The open clinic is the top of the funnel.</h2>
   <p class="lead mt">Because anyone can book a procedure without joining, every non-member treatment is a paid introduction. The conversion path runs in one direction and each step is cheap to take.</p>
   <div class="grid g4 mt2">
-    <div class="card"><div class="pill">Step one</div><h3 class="mt">Walks in</h3><p class="muted mt small">Books a procedure or buys a day pass. Pays rack rate. Owes nothing further.</p></div>
+    <div class="card"><div class="pill">Step one</div><h3 class="mt">Walks in</h3><p class="muted mt small">Books a procedure<span class="dp"> or buys a day pass</span>. Pays list price. Owes nothing further.</p></div>
     <div class="card"><div class="pill">Step two</div><h3 class="mt">Becomes a Friend</h3><p class="muted mt small">$300 a year pays for itself on roughly two procedures. Low friction, high volume, and it captures the database.</p></div>
     <div class="card"><div class="pill">Step three</div><h3 class="mt">Becomes a Resident</h3><p class="muted mt small">Wants the circuit and the room, not just the treatment. This is where recurring revenue begins.</p></div>
-    <div class="card accent"><div class="pill on">Step four</div><h3 class="mt">Becomes Longevity</h3><p class="muted mt small">Physician-led programming. Hard capped. The highest retention and the highest lifetime value in the building.</p></div>
+    <div class="card accent"><div class="pill on">Step four</div><h3 class="mt">Becomes Longevity</h3><p class="muted mt small">Physician-delivered programming. Hard capped. The highest retention and the highest lifetime value in the building.</p></div>
   </div>
 </section>
 
@@ -645,7 +648,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 
 <!-- 10 · MARKET -->
 <section id="market">
-  <div class="eyebrow">Market</div>
+  <div class="eyebrow">The category</div>
   <h2>A large, fast, cash-pay category.</h2>
   <p class="lead mt">Every figure below carries its source. Anything we could not source, we cut rather than estimate.</p>
   <div class="grid g3 mt2" id="marketGrid"></div>
@@ -653,12 +656,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 
 <!-- 11 · CATCHMENT -->
 <section id="catchment">
-  <div class="eyebrow">Catchment</div>
-  <h2>Playa Vista is the right box on the map.</h2>
-  <div class="grid g3 mt2" id="catchmentGrid"></div>
+  <div class="eyebrow">Market</div>
+  <h2 id="locHeading"></h2>
+  <p class="lead mt" id="locLead"></p>
+  <p class="muted mt2" id="locIntro"></p>
+  <div class="grid g3 mt" id="catchmentGrid"></div>
+  <div class="card accent mt2">
+    <div class="eyebrow">The opening</div>
+    <p class="mt" id="locClose"></p>
+  </div>
   <div class="mt2">
     <div class="eyebrow">Inside a realistic drive time</div>
     <div class="chips" id="geoChips"></div>
+    <p class="faint xs mt" id="locSource"></p>
   </div>
 </section>
 
@@ -666,11 +676,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <section id="economics">
   <div class="eyebrow">Unit economics</div>
   <h2 id="econTitle"></h2>
-  <p class="lead mt">No insurance contracts, no payer mix, no accounts receivable aging. Prices shown are the midpoint of a stated band; margin is contribution after the direct cost of delivery.</p>
+  <p class="lead mt" id="econLead"></p>
   <div class="tablewrap mt2">
     <table>
       <caption>Sessions per month at stabilization for the selected scenario. Volumes are re-derived per scenario from the capacity model rather than inherited, because footprint and station count differ between cases.</caption>
-      <thead><tr><th>Service</th><th>Price band</th><th class="n">Mid</th><th class="n">Margin</th><th class="n">Sessions/mo</th><th class="n">Gross/mo</th></tr></thead>
+      <thead id="svcHead"></thead>
       <tbody id="svcBody"></tbody>
     </table>
   </div>
@@ -680,7 +690,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <section id="revenue">
   <div class="eyebrow">Revenue model</div>
   <h2>Membership revenue is not additive. Here is the honest build.</h2>
-  <p class="lead mt">The easy mistake is to stack membership fees on top of full à la carte revenue. Members draw down a credit bank against services that would otherwise have been paid at rack rate, so the model nets redemption out before adding a single membership dollar.</p>
+  <p class="lead mt">The easy mistake is to stack membership fees on top of full à la carte revenue. Members draw down a credit bank against services that would otherwise have been paid at list price, so the model nets redemption out before adding a single membership dollar.</p>
   <div class="waterfall" id="waterfall"></div>
   <div class="card mt2">
     <div class="eyebrow">The ratio a reviewer will test</div>
@@ -809,7 +819,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
 <section id="contact">
   <div class="cta">
     <div class="eyebrow">Playa Vista, California</div>
-    <h2>Self-care is already social.<br>Nobody has built the room for it.</h2>
+    <h2>Self-care is already social.<br>Very few rooms are built to hold it, and fewer still are licensed to treat you in one.</h2>
     <p class="lead mt">Full model, capacity workbook and buildout detail available under NDA.</p>
     <a class="btn" href="mailto:Laura@culvercitysurgical.com?subject=L%26K%20Wellness%20%E2%80%94%20Investor%20Brief">Contact the founder</a>
   </div>
@@ -833,7 +843,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   var D = window.LK;
   // A build either pins one scenario or offers a short list to toggle between.
   // The toggle is only ever used for alternative capital structures on the
-  // SAME business — never to switch between different businesses.
+  // SAME business, never to switch between different businesses.
   var SELECTABLE = (D.selectable && D.selectable.length) ? D.selectable : [D.scenario];
   var scen = D.scenario;
 
@@ -841,7 +851,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   function money(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
   function moneyK(n){ return '$' + Math.round(n/1000).toLocaleString('en-US') + 'K'; }
   // One decimal so "$5.0M" and "$3.5M" read as a matched pair, but a second
-  // when the number needs it — $5,550,000 must not render as "$5.5M".
+  // when the number needs it: $5,550,000 must not render as "$5.5M".
   function moneyM(n){
     var m = n / 1e6;
     var d = Math.abs(m * 10 - Math.round(m * 10)) < 1e-9 ? 1 : 2;
@@ -885,8 +895,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   // ---- static renders (scenario-independent) ----
   function renderStatic(){
     var VERBS = [
-      ['Restore','Regenerative','PRP, hormone and peptide optimization, GLP-1 management, IV and NAD+ therapy.'],
-      ['Renew','Aesthetics','Neuromodulators and filler, laser, Morpheus8, Emsculpt, CoolSculpting.'],
+      ['Restore','Regenerative','Six PRP protocols, therapeutic medications, a ten-drip infusion menu and NAD+ by dose.'],
+      ['Renew','Aesthetics','Neuromodulators and filler, RF microneedling, laser resurfacing.'],
       ['Recover','Recovery','Hyperbaric oxygen, Ammortal chambers, robotic massage, compression, red light.'],
       ['Reset','Diagnostics','Advanced biometrics, DEXA, DUTCH, DNA analysis. The baseline everything else is measured against.'],
       ['Reconnect','The Club','The contrast suite, the Lounge, member events and guest privileges. The reason people come back when nothing hurts.']
@@ -918,6 +928,22 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     fillCards('marketGrid', D.market);
     fillCards('catchmentGrid', D.catchment);
 
+    ['Heading', 'Intro', 'Source'].forEach(function(slot){
+      document.getElementById('loc' + slot).textContent = D.location[slot.toLowerCase()];
+    });
+    // Segment arrays, built as nodes rather than markup.
+    ['Lead', 'Close'].forEach(function(slot){
+      var host = document.getElementById('loc' + slot);
+      clear(host);
+      D.location[slot.toLowerCase()].forEach(function(seg){
+        if (seg.em || seg.rose) {
+          host.appendChild(el('b', seg.rose ? 'rose' : null, seg.t));
+        } else {
+          host.appendChild(document.createTextNode(seg.t));
+        }
+      });
+    });
+
     var gc = document.getElementById('geoChips');
     D.geography.forEach(function(g){ gc.appendChild(el('span','chip', g)); });
   }
@@ -929,9 +955,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   function renderClinicChips(s){
     var clinic = document.getElementById('clinicChips');
     clear(clinic);
-    D.services.filter(function(v){ return v.sessions[s.key] > 0; })
-      .forEach(function(v){
-        clinic.appendChild(el('span', 'chip' + (v.cat === 'Surgery' ? ' r' : ''), v.name));
+    // Read the scenario's own resolved lines, not a global service table. Menus
+    // now differ per scenario, and `sessions` is already a number here rather
+    // than a map that has to be keyed correctly.
+    s.lines.filter(function(l){ return l.sessions > 0; })
+      .forEach(function(l){
+        clinic.appendChild(el('span', 'chip' + (l.cat === 'Surgery' ? ' r' : ''), l.name));
       });
   }
 
@@ -956,13 +985,23 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
                           .reduce(function(a, l){ return a + l.gross; }, 0);
     var hours = s.capacity.operatingRoom ? s.capacity.operatingRoom.demand : 0;
     document.getElementById('orHourRate').textContent =
-      hours ? money(Math.round(feeGross / hours)) : '—';
+      hours ? money(Math.round(feeGross / hours)) : 'n/a';
   }
 
   function renderTiers(s){
     var g = document.getElementById('tierGrid');
     clear(g);
-    D.tiers.forEach(function(t){
+    // Tier counts are keyed by BASE scenario, so the private-equity variants
+    // (ample15, surgical20) must read through dataKey. Reading s.key directly
+    // returns undefined on those sites, which silently emptied this grid.
+    var ck = s.dataKey || s.key;
+    // A tier with no count is not on offer in this scenario, ample withdrew
+    // the Day Pass in Aug 2026. Rendering it at zero reads as an error.
+    var live = D.tiers.filter(function(t){ return t.counts[ck] > 0; });
+    g.style.setProperty('--tier-cols', live.length);
+    document.getElementById('tierCount').textContent =
+      ['', 'One tier', 'Two tiers', 'Three tiers', 'Four tiers', 'Five tiers'][live.length] || (live.length + ' tiers');
+    live.forEach(function(t){
       var c = el('div', 'tier' + (t.id === 'longevity' ? ' hero-tier' : ''));
       c.appendChild(el('div','tname', t.name));
       c.appendChild(el('div','tprice', '$' + t.price.toLocaleString('en-US')));
@@ -972,7 +1011,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       t.includes.forEach(function(i){ ul.appendChild(el('li', null, i)); });
       c.appendChild(ul);
       var foot = el('div','tcount');
-      foot.appendChild(el('b', null, intfmt(t.counts[s.key])));
+      foot.appendChild(el('b', null, intfmt(t.counts[ck])));
       var label = t.isMembership ? ' members at stabilization' : ' visits per month';
       foot.appendChild(document.createTextNode(label + (t.capped ? ' · capped' : '')));
       c.appendChild(foot);
@@ -992,6 +1031,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       treatment:'Treatment rooms', ivchair:'IV and regenerative chairs', sauna:'Saunas',
       plunge:'Cold plunges', aescape:'Aescape robotic massage', ammortal:'Ammortal chambers',
       hbot:'Hyperbaric chambers', diagnostic:'Diagnostic and consult rooms', recovery:'Recovery stations',
+      redlight:'Redlight rooms', dexa:'DEXA scan room',
       or:'OR'
     };
     var sl = document.getElementById('stationList');
@@ -1040,6 +1080,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   function renderServices(s){
     var tb = document.getElementById('svcBody');
     clear(tb);
+    var band = s.menu === 'legacy';
+    var head = band
+      ? ['Service', 'Price band', 'Mid', 'Margin', 'Sessions/mo', 'Gross/mo']
+      : ['Service', 'Price', 'Margin', 'Sessions/mo', 'Monthly gross', 'After margin'];
+    var hr = el('tr');
+    head.forEach(function(h, i){ hr.appendChild(el(i === 0 ? 'th' : 'th', i === 0 ? null : 'n', h)); });
+    var th = document.getElementById('svcHead');
+    clear(th); th.appendChild(hr);
+    document.getElementById('econLead').textContent = band
+      ? 'No insurance contracts, no payer mix, no accounts receivable aging. Prices shown are the midpoint of a stated band; margin is contribution after the direct cost of delivery.'
+      : 'No insurance contracts, no payer mix, no accounts receivable aging. Prices are exact, not banded; margin is contribution after the direct cost of delivery.';
     var cats = {};
     // Zero-volume lines are not part of this scenario. Without this filter the
     // wellness-only briefs render surgical rows at $0, which reads as a
@@ -1055,35 +1106,55 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       cats[cat].forEach(function(l){
         var tr = el('tr');
         cell(tr, null, l.name);
-        cell(tr, 'muted', '$' + intfmt(l.lo) + '–$' + intfmt(l.hi));
+        // The legacy menu prices from a stated band and shows its midpoint. The
+        // current menu states an exact price, so the band column would print the
+        // same number twice; it carries contribution after margin instead.
+        if (band) { cell(tr, 'muted', '$' + intfmt(l.lo) + '–$' + intfmt(l.hi)); }
         cell(tr, 'n', money(l.price));
         cell(tr, 'n', pct0(l.margin));
         cell(tr, 'n', intfmt(l.sessions));
         cell(tr, 'n', money(l.gross));
+        if (!band) { cell(tr, 'n', money(l.net)); }
         tb.appendChild(tr);
       });
     });
+    // The total row has to follow whichever column set is in play. The legacy
+    // layout leaves the band and mid cells blank; the current layout has no band
+    // or mid, and carries contribution after margin in the last cell.
     var tot = el('tr','total');
-    cell(tot, null, 'Service delivery at rack value');
-    cell(tot, null, '');
-    cell(tot, 'n', '');
-    cell(tot, 'n', pct0(s.serviceMargin));
-    cell(tot, 'n', intfmt(s.lines.reduce(function(a,l){ return a + l.sessions; }, 0)));
-    cell(tot, 'n', money(s.rackValue));
+    var sessionTotal = s.lines.reduce(function(a,l){ return a + l.sessions; }, 0);
+    cell(tot, null, 'Service delivery at list value');
+    if (band) {
+      cell(tot, null, '');
+      cell(tot, 'n', '');
+      cell(tot, 'n', pct0(s.serviceMargin));
+      cell(tot, 'n', intfmt(sessionTotal));
+      cell(tot, 'n', money(s.rackValue));
+    } else {
+      cell(tot, 'n', '');
+      cell(tot, 'n', pct0(s.serviceMargin));
+      cell(tot, 'n', intfmt(sessionTotal));
+      cell(tot, 'n', money(s.rackValue));
+      cell(tot, 'n', money(s.rackValue - s.serviceCogs));
+    }
     tb.appendChild(tot);
   }
 
   function renderWaterfall(s){
     var w = document.getElementById('waterfall');
     clear(w);
-    [['', 'Service delivery at rack value', 'All 17 lines, every session, priced at what a walk-in pays.', s.rackValue],
+    // Line count is per scenario: ample dropped three aesthetics lines and split
+    // IV into three dose tiers, so "17" stopped being true for everyone.
+    var liveLines = s.lines.filter(function(l){ return l.sessions > 0; }).length;
+    [['', 'Service delivery at list value', 'All ' + liveLines + ' lines, every session, priced at what a walk-in pays.', s.rackValue],
      ['minus','less member credit redemption','Residents and Longevity members drawing on credits rather than paying cash.', -s.redeemed],
      ['minus','less member and Friends discount','Blended discount on à la carte purchases beyond the credit bank.', -s.memberDiscount],
      ['sum','À la carte revenue','What non-members and cash-paying members actually pay.', s.alaCarteNet],
      ['plus','plus membership fees','Friends, Resident and Longevity recurring revenue.', s.membershipRevenue],
      ['plus','plus day pass and access','Single-visit circuit access, no membership required.', s.accessRevenue],
      ['sum','Total revenue','Per month at stabilization.', s.totalRevenue]
-    ].forEach(function(r){
+    ].filter(function(r){ return !(r[1].indexOf('day pass') > -1 && !s.accessRevenue); })
+     .forEach(function(r){
       var row = el('div','wf-row ' + r[0]);
       var k = el('div','k', r[1]);
       k.appendChild(el('small', null, r[2]));
@@ -1177,7 +1248,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
     var g = document.getElementById('askGrid');
     clear(g);
     // On a private raise the injection is a committed number, so the 10%/20%
-    // framing is meaningless — show the raise and what share of the project
+    // framing is meaningless, show the raise and what share of the project
     // it covers instead.
     var cells = s.isPrivate
       ? [['Private investment', money(s.injectionFloor)],
@@ -1240,7 +1311,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       cell(tr, null, 'Year ' + y.year);
       cell(tr, 'n', signed(y.operating));
       cell(tr, 'n', money(y.debt));
-      var d = el('td','n', y.dscr === null ? '—' : xfmt(y.dscr));
+      var d = el('td','n', y.dscr === null ? 'n/a' : xfmt(y.dscr));
       d.style.color = (y.dscr !== null && y.dscr >= D.assumptions.dscrThreshold) ? 'var(--rose)' : 'var(--bone-dim)';
       tr.appendChild(d);
       tb.appendChild(tr);
@@ -1286,7 +1357,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       ['Founder & Operator', 'Operations, brand, capital, compliance'],
       ['Medical Director (MD/DO)', 'Clinical oversight, protocols, standing orders'],
       ['Aesthetics Injector (NP or PA)', 'Neuromodulators, filler, energy devices'],
-      ['Longevity Clinical Lead', 'Hormone, peptide, GLP-1 and biomarker programs'],
+      ['Longevity Clinical Lead', 'Therapeutic medications, GLP-1 and biomarker programs'],
       ['Club General Manager', 'Membership, events, hospitality, retention'],
       ['Registered Nurses (2)', 'IV therapy, regenerative, recovery floor']
     ];
@@ -1317,11 +1388,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       ['Members redeem more service than their fees cover.',
        'Credit banks are sized against measured redemption, and the model asserts the redemption ratio stays below 100%. Tier pricing is reviewed against actual utilization quarterly, and the three-month minimum with 30-day change notice makes repricing operationally possible.'],
       ['A key clinical seat turns over during the ramp.',
-       'The club layer, recovery floor and IV lounge run on materially less scarce staffing than the injectable and physician-led lines, so a temporary clinical gap narrows the offering without closing the building. Clinical compensation is structured with retention terms through the ramp period.'],
+       'The asset is the facility, not any one clinician. The club layer, recovery floor and infusion suite run on materially less scarce staffing than the injectable and prescribing lines, so a temporary clinical gap narrows the offering without closing the building. A licensed, equipped facility can credential a replacement; a practice built around one name cannot. Clinical compensation is structured with retention terms through the ramp period.'],
       ['Rates move against us before close.',
        'Coverage is stress-tested 200 basis points above the assumed rate and disclosed at each level rather than quoted at one. See the sensitivity note in the SBA section.'],
       ['A national brand opens nearby.',
-       'The defensible asset is the licensed medical practice, not the sauna. A recovery studio cannot add injectables, hormones and physician oversight without becoming a medical practice, which is a materially harder thing to build than another cold plunge.'],
+       'The defensible asset is the licensed facility, not the sauna. Adding injectables, infusions and physician oversight is not a product decision for a recovery studio; it means becoming a licensed medical facility, with the staffing, supervision, malpractice and accreditation that implies. That is a materially harder thing to build than another cold plunge.'],
       ['Wet-area construction overruns.',
        'Plunges, saunas and steam are the highest-variance line in the buildout. The lean case exists precisely as the fallback scope, and the working capital reserve is sized against the modeled cash trough with headroom rather than to a round number.']
     ];
@@ -1330,7 +1401,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
         ['An adverse surgical event, or a lapse in accreditation.',
          'The moderate-sedation ceiling and the two-hour recovery cap are the primary controls: they exclude every general-anesthesia procedure and the acuity that comes with them. Published patient-selection criteria, a written transfer agreement with a nearby acute-care facility, and a standing QA and performance-improvement program under the accrediting body sit behind that.'],
         ['Operating room utilization comes in below plan.',
-         'The facility bills a fee for the room, not for a particular surgeon, so the suite is not one person’s key-person exposure — additional credentialed principals can be added without changing the model. Surgical facility fees are roughly a tenth of total revenue and the OR runs at 61% of practical capacity, so the wellness club and clinic carry fixed overhead independently and coverage holds above the 1.25x convention on that business alone.']);
+         'The facility bills a fee for the room, not for a particular surgeon, so the suite is not one person’s key-person exposure, additional credentialed principals can be added without changing the model. Surgical facility fees are roughly a tenth of total revenue and the OR runs at 61% of practical capacity, so the wellness club and clinic carry fixed overhead independently and coverage holds above the 1.25x convention on that business alone.']);
     }
     g.appendChild(el('div','rh','Risk'));
     g.appendChild(el('div','rh','Mitigation'));
@@ -1401,7 +1472,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       ' · Playa Vista · Investor & SBA Brief';
 
     // Line count moves with the scenario, so the headings cannot be hardcoded.
-    var live = D.services.filter(function(v){ return v.sessions[s.key] > 0; }).length;
+    var live = s.lines.filter(function(l){ return l.sessions > 0; }).length;
     var word = WORDS[live] || String(live);
     document.getElementById('offeringTitle').textContent =
       'Five verbs, ' + word.toLowerCase() + ' revenue lines.';
@@ -1419,7 +1490,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
       }
       document.getElementById('askIntro').textContent =
         'Project cost is unchanged at ' + moneyM(s.projectCost) + '. The private raise replaces the ' +
-        'minimum equity injection, so the SBA 7(a) loan shrinks to fill the rest — ' +
+        'minimum equity injection, so the SBA 7(a) loan shrinks to fill the rest, ' +
         pct0(s.injectionPct) + ' of the project funded by the raise. Less debt against the same ' +
         'operating income lifts stabilized coverage to ' + xfmt(s.dscr) + '.' + compare;
     } else {
@@ -1437,6 +1508,21 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose);outline-offse
   function render(){
     var s = D.scenarios[scen];
     renderScenarioChrome(s);
+    // Copy that only holds when the scenario sells day passes. Ample withdrew
+    // them in Aug 2026; lean and surgical still offer them, and all five sites
+    // share this one template, so the prose has to switch rather than be cut.
+    document.getElementById('scopeN').textContent = s.scope.licensed + ' of ' + s.scope.total;
+    document.getElementById('scopeL').textContent =
+      'Services on the L&K menu that require a physician, nurse practitioner or nurse. '
+      + 'A recovery studio without a physician can offer ' + s.scope.openToAnyone + '.';
+
+    var hasDayPass = s.accessRevenue > 0;
+    Array.prototype.forEach.call(document.querySelectorAll('.dp'), function(n){
+      n.style.display = hasDayPass ? '' : 'none';
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.ndp'), function(n){
+      n.style.display = hasDayPass ? 'none' : '';
+    });
     bind(s);
     renderClinicChips(s); renderSurgery(s);
     renderTiers(s); renderSpace(s); renderCapacity(s); renderServices(s);
